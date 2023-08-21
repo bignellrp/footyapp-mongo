@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  footyapp-dev:
+    env_file: .env
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/app
+    depends_on:
+      - mongodb
+  
+  mongo-setup:
+    build:
+      context: ./mongo-setup  # Path to the directory containing Dockerfile and setup files
+    image: custom-mongo-image  # Tag will be specified in the Dockerfile
+
+  mongodb:
+    env_file: .env
+    image: custom-mongo-image
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
