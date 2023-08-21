@@ -1,13 +1,24 @@
-# Use the official MongoDB image as the base image
 FROM mongo:latest
 
-# Set the working directory
-WORKDIR /app
+# Define build arguments with default values
+ARG MONGO_INITDB_ROOT_USERNAME
+ARG MONGO_INITDB_ROOT_PASSWORD
+ARG MONGO_USERNAME
+ARG MONGO_PASSWORD
 
 # Copy the startup script and data files into the image
-COPY startup.py /app/
-COPY players.json /app/
-COPY games.json /app/
+COPY startup.sh /tmp/
+COPY players.json /tmp/
+COPY games.json /tmp/
 
-# Run the Python startup script as the entry point
-CMD ["python", "/app/startup.py"]
+# Make the script executable
+RUN chmod +x /tmp/startup.sh
+
+# Pass build arguments as environment variables during the build process
+ENV MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME
+ENV MONGO_INITDB_ROOT_PASSWORD=$MONGO_INITDB_ROOT_PASSWORD
+ENV MONGO_USERNAME=$MONGO_USERNAME
+ENV MONGO_PASSWORD=$MONGO_PASSWORD
+
+# Run the Bash script as the entry point
+CMD ["bash", "/tmp/startup.sh"]
