@@ -53,7 +53,20 @@ except Exception as e:
 @app.route('/players', methods=['GET'])
 def get_players():
     players = players_collection.find()
-    player_list = [{"_id": str(player["_id"]), "name": player["name"]} for player in players]
+    player_list =   [   {
+                            "name": player["name"],
+                            "total": player["total"],
+                            "wins": player["wins"],
+                            "draws": player["draws"],
+                            "losses": player["losses"],
+                            "score": player["score"],
+                            "playing": player["playing"],
+                            "played": player["played"],
+                            "percent": player["percent"],
+                            "winpercent": player["winpercent"]
+                        } 
+                    for player in players
+                    ]
     return jsonify(player_list)
 
 @app.route('/players', methods=['POST'])
