@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from pymongo import MongoClient
+from pymongo import MongoClient, ASCENDING
 from bson import ObjectId
 import json
 
@@ -12,62 +12,40 @@ import os
 load_dotenv()
 
 # Access environment variables
-mongo_username = os.getenv("MONGO_USERNAME")
-mongo_password = os.getenv("MONGO_PASSWORD")
+# Init script might not be working as mongo nonroot user is not working
+mongo_username = os.getenv("MONGO_INITDB_ROOT_USERNAME")
+mongo_password = os.getenv("MONGO_INITDB_ROOT_PASSWORD")
 
 # Replace with your MongoDB connection details
-mongo_uri = f"mongodb://{mongo_username}:{mongo_password}@localhost:27017/"
-
-# Initial setup. Need to confirm this is idempotent
-try:
-    # Connect to MongoDB
-    client = MongoClient(mongo_uri)
-    admin_db = client.admin
-
-    # Create players and games databases
-    players_db = client.players
-    games_db = client.games
-
-    # Assuming this has been done by the js init script
-    # # Create users in players and games databases
-    # player_user = {
-    #     "user": {mongo_username},
-    #     "pwd": {mongo_password},
-    #     "roles": [{"role": "readWrite", "db": "players"}]
-    # }
-    # players_db.command("createUser", **player_user)
-
-    # game_user = {
-    #     "user": {mongo_username},
-    #     "pwd": {mongo_password},
-    #     "roles": [{"role": "readWrite", "db": "games"}]
-    # }
-    # games_db.command("createUser", **game_user)
-
-    # Possibly dont have to pre load data, this will go in as the app is used.
-    # Insert player data from players.json
-    with open('players.json', 'r') as players_file:
-        players_data = json.load(players_file)
-        players_collection = players_db.players
-        players_collection.insert_many(players_data)
-
-    # Insert game data from games.json
-    with open('games.json', 'r') as games_file:
-        games_data = json.load(games_file)
-        games_collection = games_db.games
-        games_collection.insert_many(games_data)
-
-    print("Databases, users, and data inserted successfully")
-
-except Exception as e:
-    print("Error:", e)
+# How can i get the mongo IP as a variable
+mongo_uri = f"mongodb://{mongo_username}:{mongo_password}@172.20.0.2:27017/"
 
 try:
     client = MongoClient(mongo_uri)
     db = client['footyapp']
     players_collection = db['players']
     games_collection = db['games']
-    print("Connected to MongoDB successfully")
+
+    # Create a unique index on the 'name' field
+    db.players.create_index([("name", ASCENDING)], unique=True)
+    # Create a unique index on the 'name' field
+    db.games.create_index([("date", ASCENDING)], unique=True)
+
+    print("Database connection successfull!")
+
+    try:
+        # Insert player data from players.json
+        with open('players.json', 'r') as players_file:
+            players_data = json.load(players_file)
+            players_collection.insert_many(players_data)
+
+        # Insert game data from games.json
+        with open('games.json', 'r') as games_file:
+            games_data = json.load(games_file)
+            games_collection.insert_one(games_data)
+    except Exception as e:
+        print("Duplicate data detected:", e)
+
 except Exception as e:
     print("Error connecting to MongoDB:", e)
 
@@ -97,15 +75,15 @@ def add_game():
     game_id = games_collection.insert_one(new_game).inserted_id
     return jsonify({"_id": str(game_id), "message": "Game added successfully"})
 
-@app.route('/games/<game_id>', methods=['PUT'])
-def update_game(game_id):
+@app.route('/games/<date>', methods=['PUT'])
+def update_game(date):
     game_updates = request.json
-    games_collection.update_one({"_id": ObjectId(game_id)}, {"$set": game_updates})
+    games_collection.update_one({"date": date}, {"$set": game_updates})
     return jsonify({"message": "Game updated successfully"})
 
-@app.route('/games/<game_id>', methods=['DELETE'])
-def delete_game(game_id):
-    games_collection.delete_one({"_id": ObjectId(game_id)})
+@app.route('/games/<date>', methods=['DELETE'])
+def delete_game(date):
+    games_collection.delete_one({"date": date})
     return jsonify({"message": "Game deleted successfully"})
 
 if __name__ == '__main__':

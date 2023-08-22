@@ -1,6 +1,14 @@
 [
     {
-      "name": "Player 1",
-      "score": "77"
+      "name": "Player 15",
+      "total": 77,
+      "wins": 0,
+      "draws": 0,
+      "losses": 0,
+      "score": 0,
+      "playing": true,
+      "played": 0,
+      "percent": 0,
+      "winpercent": 0
     }
 ]
