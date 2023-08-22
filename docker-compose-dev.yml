@@ -12,19 +12,15 @@ services:
       - .:/app
     depends_on:
       - mongodb
-  
-  mongo-setup:
-    build:
-      context: ./mongo-setup  # Path to the directory containing Dockerfile and setup files
-    image: custom-mongo-image  # Tag will be specified in the Dockerfile
 
   mongodb:
     env_file: .env
-    image: custom-mongo-image
+    image: mongo:latest
     ports:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
 
 volumes:
   mongodb_data:
