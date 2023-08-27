@@ -126,8 +126,9 @@ def update_score(date):
                 "winpercent": findplayer["winpercent"]
             }
         percentage = player_record["wins"] / player_record["played"] * 100
+        percentage = int(round(percentage))
         if player_record["wins"] < 5:
-            winpercentage = '0'
+            winpercentage = 0
         else:
             winpercentage = percentage
         players_collection.update_one({"name": player},{"$set": {"percent": percentage}})
