@@ -131,7 +131,7 @@ def update_score(date):
         else:
             winpercentage = percentage
         players_collection.update_one({"name": player},{"$set": {"percent": percentage}})
-        players_collection.update_one({"name": player},{"$inc": {"winpercent": winpercentage}})
+        players_collection.update_one({"name": player},{"$set": {"winpercent": winpercentage}})
     return jsonify({"message": "Game updated successfully"})
 
 @games_bp.route('/games/most_recent_game', methods=['GET'])
