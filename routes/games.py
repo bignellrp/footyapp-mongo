@@ -68,7 +68,7 @@ def update_score(date):
     game = games_collection.find_one({"date": date})
     if game:
         game["date"] = datetime.strptime(game["date"], '%Y-%m-%d')
-        game_record = jsonify({
+        game_data = {
             "date": game["date"].strftime('%Y-%m-%d'),
             "teamA": game["teamA"],
             "teamB": game["teamB"],
@@ -78,7 +78,8 @@ def update_score(date):
             "totalTeamB": game["totalTeamB"],
             "colourTeamA": game["colourTeamA"],
             "colourTeamB": game["colourTeamB"]
-        })
+        }
+    game_record = jsonify(game_data)
     score = request.json
     games_collection.update_one({"date": date}, {"$set": score})
     if score["scoreTeamA"] > score["scoreTeamB"]:
