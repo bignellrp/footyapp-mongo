@@ -113,7 +113,7 @@ def update_score(date):
     for player in game_record["teamA"] or game_record["teamB"]:
         findplayer = players_collection.find_one({"name": player})
         if findplayer:
-            player_record = jsonify({
+            player_record = {
                 "name": findplayer["name"],
                 "total": findplayer["total"],
                 "wins": findplayer["wins"],
@@ -124,7 +124,7 @@ def update_score(date):
                 "played": findplayer["played"],
                 "percent": findplayer["percent"],
                 "winpercent": findplayer["winpercent"]
-            })
+            }
         percentage = player_record["wins"] / player_record["played"] * 100
         if player_record["wins"] < 5:
             winpercentage = '0'
