@@ -160,6 +160,60 @@ def get_most_recent_game():
                     ]
     return jsonify(game_list)
 
+@games_bp.route('/games/swap_player', methods=['PUT'])
+@jwt_required()
+def swap_player():
+    try:
+        # Get input data
+        current_player = request.json.get("current_player")
+        new_player = request.json.get("new_player")
+        
+        # Find the most recent game
+        most_recent_game = games_collection.find_one({}, sort=[("date", -1)])
+        
+        if most_recent_game:
+            teamA = most_recent_game.get("teamA", [])
+            teamB = most_recent_game.get("teamB", [])
+            
+            # Calculate player total differences
+            current_player_total_diff = 0
+            new_player_total_diff = 0
+            
+            # Calculate current player total difference
+            current_player_info = players_collection.find_one({"name": current_player})
+            if current_player_info:
+                current_player_total_diff = current_player_info["total"]
+            
+            # Calculate new player total difference
+            new_player_info = players_collection.find_one({"name": new_player})
+            if new_player_info:
+                new_player_total_diff = new_player_info["total"]
+            
+            # Replace current_player with new_player in teamA
+            if current_player in teamA:
+                teamA = [new_player if player == current_player else player for player in teamA]
+            # Replace current_player with new_player in teamB
+            if current_player in teamB:
+                teamB = [new_player if player == current_player else player for player in teamB]
+            
+            # Update the game with the modified teams
+            games_collection.update_one(
+                {"date": most_recent_game["date"]},
+                {"$set": {"teamA": teamA, "teamB": teamB}}
+            )
+            
+            # Update game totalTeamA and totalTeamB
+            games_collection.update_one(
+                {"date": most_recent_game["date"]},
+                {"$inc": {"totalTeamA": new_player_total_diff - current_player_total_diff}}
+            )
+            
+            return jsonify({"message": "Player swapped and totals updated successfully"})
+        else:
+            return jsonify({"message": "No games found"})
+    except Exception as e:
+        return jsonify({"message": str(e)})
+
 @games_bp.route('/games', methods=['POST'])
 @jwt_required()
 def add_game():
