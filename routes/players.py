@@ -227,3 +227,15 @@ def update_playing_players():
         return jsonify({"message": "Players updated successfully"})
     else:
         return jsonify({"message": "No players were updated"})
+
+@players_bp.route('/players/update_notplaying', methods=['PUT'])
+def update_not_playing_players():
+    data = request.json  # List of player names to update
+
+    # Update the 'playing' field to False for the specified players
+    result = players_collection.update_many({"name": {"$in": data}}, {"$set": {"playing": False}})
+
+    if result.modified_count > 0:
+        return jsonify({"message": "Players updated successfully"})
+    else:
+        return jsonify({"message": "No players were updated"})
