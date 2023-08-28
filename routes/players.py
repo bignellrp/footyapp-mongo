@@ -171,7 +171,7 @@ def get_game_player_tally():
 
     # Create the playing_players list with name
     playing_players = [
-        {"name": player["name"]} for player in players if player.get("playing")
+        {"name": player["name"], "total": player["total"]} for player in players if player.get("playing")
     ]
     return jsonify(playing_players)
 

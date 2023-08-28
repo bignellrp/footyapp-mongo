@@ -434,5 +434,3 @@ Content-Type: application/json
   "message": "Players updated successfully"
 }
 ```
-
-Feel free to adapt and expand upon this README template to suit your project's requirements and formatting preferences.
