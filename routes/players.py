@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from db_connect import db_connect
-from flask_jwt_extended import jwt_required
+#from flask_jwt_extended import jwt_required
 
 # Create the blueprint
 players_bp = Blueprint("players", __name__)
@@ -19,7 +19,7 @@ players_collection, games_collection = db_connect()
 #     return jsonify(player_list)
 
 @players_bp.route('/players', methods=['GET'])
-@jwt_required()
+#@jwt_required()
 def get_players():
     players = players_collection.find()
     player_list =   [   {
@@ -39,7 +39,7 @@ def get_players():
     return jsonify(player_list)
 
 @players_bp.route('/players/player_names', methods=['GET'])
-@jwt_required()
+#@jwt_required()
 def get_player_names():
     try:
         players = players_collection.find()
@@ -65,7 +65,7 @@ def get_player_names():
         return jsonify({"msg": "An error occurred"}), 500
 
 @players_bp.route('/players/all_players', methods=['GET'])
-@jwt_required()
+#@jwt_required()
 def get_all_players():
     players = players_collection.find()
     
@@ -85,7 +85,7 @@ def get_all_players():
     return jsonify(player_totals)
 
 @players_bp.route('/players/player_stats', methods=['GET'])
-@jwt_required()
+#@jwt_required()
 def get_player_stats():
 
     # Find all players from players collection
@@ -113,7 +113,7 @@ def get_player_stats():
     return jsonify(player_stats)
 
 @players_bp.route('/players/leaderboard', methods=['GET'])
-@jwt_required()
+#@jwt_required()
 def get_leaderboard():
 
     # Find all players from players collection
@@ -138,7 +138,7 @@ def get_leaderboard():
     return jsonify(leaderboard)
 
 @players_bp.route('/players/winpercentage', methods=['GET'])
-@jwt_required()
+#@jwt_required()
 def get_winpercentage():
 
     # Find all players from players collection
@@ -160,7 +160,7 @@ def get_winpercentage():
     return jsonify(player_winpercentages)
 
 @players_bp.route('/players/game_player_tally', methods=['GET'])
-@jwt_required()
+#@jwt_required()
 def get_game_player_tally():
 
     # Find all players from players collection
@@ -182,7 +182,7 @@ def add_player():
     return jsonify({"_id": str(player_id), "message": "Player added successfully"})
 
 @players_bp.route('/players', methods=['PUT'])
-@jwt_required()
+#@jwt_required()
 def update_players():
     updated_data = request.json  # New values to update for all players
 
@@ -195,6 +195,7 @@ def update_players():
         return jsonify({"message": "No players were updated"})
 
 @players_bp.route('/players/<player_name>', methods=['PUT'])
+#@jwt_required()
 def update_player(player_name):
     updated_data = request.json  # New values to update for the specific player
 
@@ -207,6 +208,7 @@ def update_player(player_name):
         return jsonify({"message": "Player not found or no changes applied"})
 
 @players_bp.route('/players/<player_name>', methods=['DELETE'])
+#@jwt_required()
 def delete_player(player_name):
     # Delete the specific player by matching the player's name
     result = players_collection.delete_one({"name": player_name})
@@ -217,6 +219,7 @@ def delete_player(player_name):
         return jsonify({"message": f"Player '{player_name}' not found"})
 
 @players_bp.route('/players/update_playing', methods=['PUT'])
+#@jwt_required()
 def update_playing_players():
     data = request.json  # List of player names to update
 
@@ -229,6 +232,7 @@ def update_playing_players():
         return jsonify({"message": "No players were updated"})
 
 @players_bp.route('/players/update_notplaying', methods=['PUT'])
+#@jwt_required()
 def update_not_playing_players():
     data = request.json  # List of player names to update
 

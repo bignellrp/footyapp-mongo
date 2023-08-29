@@ -8,13 +8,13 @@ This API provides endpoints for managing and retrieving game statistics. It allo
 
 **Endpoint:** `/games`  
 **Method:** `GET`  
-**Protected:** Yes (JWT Required)  
+**Protected:** Yes (TOKEN Required)  
 **Description:** Retrieve a list of all games with their information.
 
 **Request:**
 ```http
 GET /games
-Authorization: Bearer YOUR_JWT_TOKEN
+Authorization: Bearer YOUR_TOKEN
 ```
 
 **Response:**
@@ -39,20 +39,20 @@ Authorization: Bearer YOUR_JWT_TOKEN
 
 **Endpoint:** `/games/game_stats`  
 **Method:** `GET`  
-**Protected:** Yes (JWT Required)  
+**Protected:** Yes (TOKEN Required)  
 **Description:** Retrieve game statistics, including dates and scores, sorted by date in descending order.
 
 ### Get Player's Wins
 
 **Endpoint:** `/games/wins/<player>`  
 **Method:** `GET`  
-**Protected:** Yes (JWT Required)  
+**Protected:** Yes (TOKEN Required)  
 **Description:** Get the number of games won by a specific player. Updates the player's win count.
 
 **Request:**
 ```http
 GET /games/wins/Player1
-Authorization: Bearer YOUR_JWT_TOKEN
+Authorization: Bearer YOUR_TOKEN
 ```
 
 **Response:**
@@ -66,13 +66,13 @@ Authorization: Bearer YOUR_JWT_TOKEN
 
 **Endpoint:** `/games/updatescore/<date>`  
 **Method:** `PUT`  
-**Protected:** Yes (JWT Required)  
+**Protected:** Yes (TOKEN Required)  
 **Description:** Update the scores of a game and calculate statistics for the players involved.
 
 **Request:**
 ```http
 PUT /games/updatescore/2023-08-30
-Authorization: Bearer YOUR_JWT_TOKEN
+Authorization: Bearer YOUR_TOKEN
 Content-Type: application/json
 
 {
@@ -92,20 +92,20 @@ Content-Type: application/json
 
 **Endpoint:** `/games/most_recent_game`  
 **Method:** `GET`  
-**Protected:** Yes (JWT Required)  
+**Protected:** Yes (TOKEN Required)  
 **Description:** Retrieve information about the most recent game played.
 
 ### Swap Players in a Game
 
 **Endpoint:** `/games/swap_player`  
 **Method:** `PUT`  
-**Protected:** Yes (JWT Required)  
+**Protected:** Yes (TOKEN Required)  
 **Description:** Swap a player's position with a new player in the most recent game. Update team composition and game totals accordingly.
 
 **Request:**
 ```http
 PUT /games/swap_player
-Authorization: Bearer YOUR_JWT_TOKEN
+Authorization: Bearer YOUR_TOKEN
 Content-Type: application/json
 
 {
@@ -126,13 +126,13 @@ Content-Type: application/json
 
 **Endpoint:** `/games`  
 **Method:** `POST`  
-**Protected:** Yes (JWT Required)  
+**Protected:** Yes (TOKEN Required)  
 **Description:** Add a new game record to the database.
 
 **Request:**
 ```http
 POST /games
-Authorization: Bearer YOUR_JWT_TOKEN
+Authorization: Bearer YOUR_TOKEN
 Content-Type: application/json
 
 {
@@ -160,13 +160,13 @@ Content-Type: application/json
 
 **Endpoint:** `/games/<date>`  
 **Method:** `PUT`  
-**Protected:** Yes (JWT Required)  
+**Protected:** Yes (TOKEN Required)  
 **Description:** Update an existing game's information using the specified date.
 
 **Request:**
 ```http
 PUT /games/2023-09-01
-Authorization: Bearer YOUR_JWT_TOKEN
+Authorization: Bearer YOUR_TOKEN
 Content-Type: application/json
 
 {
@@ -186,13 +186,13 @@ Content-Type: application/json
 
 **Endpoint:** `/games/<date>`  
 **Method:** `DELETE`  
-**Protected:** Yes (JWT Required)  
+**Protected:** Yes (TOKEN Required)  
 **Description:** Delete a game record from the database using the specified date.
 
 **Request:**
 ```http
 DELETE /games/2023-09-01
-Authorization: Bearer YOUR_JWT_TOKEN
+Authorization: Bearer YOUR_TOKEN
 ```
 
 **Response:**
@@ -210,13 +210,13 @@ This API provides endpoints for managing and retrieving player statistics. It en
 
 **Endpoint:** `/players`  
 **Method:** `GET`  
-**Protected:** Yes (JWT Required)  
+**Protected:** Yes (TOKEN Required)  
 **Description:** Retrieve a list of all players with their statistics.
 
 **Request:**
 ```http
 GET /players
-Authorization: Bearer YOUR_JWT_TOKEN
+Authorization: Bearer YOUR_TOKEN
 ```
 
 **Response:**
@@ -242,13 +242,13 @@ Authorization: Bearer YOUR_JWT_TOKEN
 
 **Endpoint:** `/players/player_names`  
 **Method:** `GET`  
-**Protected:** Yes (JWT Required)  
+**Protected:** Yes (TOKEN Required)  
 **Description:** Retrieve a list of player names and their playing status.
 
 **Request:**
 ```http
 GET /players/player_names
-Authorization: Bearer YOUR_JWT_TOKEN
+Authorization: Bearer YOUR_TOKEN
 ```
 
 **Response:**
@@ -266,35 +266,35 @@ Authorization: Bearer YOUR_JWT_TOKEN
 
 **Endpoint:** `/players/all_players`  
 **Method:** `GET`  
-**Protected:** Yes (JWT Required)  
+**Protected:** Yes (TOKEN Required)  
 **Description:** Retrieve a list of all player names and their total scores.
 
 ### Get Player Stats
 
 **Endpoint:** `/players/player_stats`  
 **Method:** `GET`  
-**Protected:** Yes (JWT Required)  
+**Protected:** Yes (TOKEN Required)  
 **Description:** Retrieve detailed statistics for each player, including wins, draws, losses, and more.
 
 ### Get Leaderboard
 
 **Endpoint:** `/players/leaderboard`  
 **Method:** `GET`  
-**Protected:** Yes (JWT Required)  
+**Protected:** Yes (TOKEN Required)  
 **Description:** Retrieve a leaderboard of the top players based on their scores.
 
 ### Get Win Percentages
 
 **Endpoint:** `/players/winpercentage`  
 **Method:** `GET`  
-**Protected:** Yes (JWT Required)  
+**Protected:** Yes (TOKEN Required)  
 **Description:** Retrieve win percentages for each player.
 
 ### Get Game Player Tally
 
 **Endpoint:** `/players/game_player_tally`  
 **Method:** `GET`  
-**Protected:** Yes (JWT Required)  
+**Protected:** Yes (TOKEN Required)  
 **Description:** Retrieve a list of players currently playing in games.
 
 ### Add New Player
@@ -334,7 +334,7 @@ Content-Type: application/json
 
 **Endpoint:** `/players`  
 **Method:** `PUT`  
-**Protected:** Yes (JWT Required)  
+**Protected:** Yes (TOKEN Required)  
 **Description:** Update attributes for all players.
 
 ### Update Player
