@@ -11,66 +11,6 @@ This API provides endpoints for managing and retrieving game statistics. It allo
 **Protected:** Yes (JWT Required)  
 **Description:** Retrieve a list of all games with their information.
 
-### Get Game Statistics
-
-**Endpoint:** `/games/game_stats`  
-**Method:** `GET`  
-**Protected:** Yes (JWT Required)  
-**Description:** Retrieve game statistics, including dates and scores, sorted by date in descending order.
-
-### Get Player's Wins
-
-**Endpoint:** `/games/wins/<player>`  
-**Method:** `GET`  
-**Protected:** Yes (JWT Required)  
-**Description:** Get the number of games won by a specific player. Updates the player's win count.
-
-### Update Game Score
-
-**Endpoint:** `/games/updatescore/<date>`  
-**Method:** `PUT`  
-**Protected:** Yes (JWT Required)  
-**Description:** Update the scores of a game and calculate statistics for the players involved.
-
-### Get Most Recent Game
-
-**Endpoint:** `/games/most_recent_game`  
-**Method:** `GET`  
-**Protected:** Yes (JWT Required)  
-**Description:** Retrieve information about the most recent game played.
-
-### Swap Players in a Game
-
-**Endpoint:** `/games/swap_player`  
-**Method:** `PUT`  
-**Protected:** Yes (JWT Required)  
-**Description:** Swap a player's position with a new player in the most recent game. Update team composition and game totals accordingly.
-
-### Add New Game
-
-**Endpoint:** `/games`  
-**Method:** `POST`  
-**Protected:** Yes (JWT Required)  
-**Description:** Add a new game record to the database.
-
-### Update Game
-
-**Endpoint:** `/games/<date>`  
-**Method:** `PUT`  
-**Protected:** Yes (JWT Required)  
-**Description:** Update an existing game's information using the specified date.
-
-### Delete Game
-
-**Endpoint:** `/games/<date>`  
-**Method:** `DELETE`  
-**Protected:** Yes (JWT Required)  
-**Description:** Delete a game record from the database using the specified date.
-
-## Example Usage
-
-### Get All Games
-
 **Request:**
 ```http
 GET /games
@@ -95,7 +35,19 @@ Authorization: Bearer YOUR_JWT_TOKEN
 ]
 ```
 
+### Get Game Statistics
+
+**Endpoint:** `/games/game_stats`  
+**Method:** `GET`  
+**Protected:** Yes (JWT Required)  
+**Description:** Retrieve game statistics, including dates and scores, sorted by date in descending order.
+
 ### Get Player's Wins
+
+**Endpoint:** `/games/wins/<player>`  
+**Method:** `GET`  
+**Protected:** Yes (JWT Required)  
+**Description:** Get the number of games won by a specific player. Updates the player's win count.
 
 **Request:**
 ```http
@@ -111,6 +63,11 @@ Authorization: Bearer YOUR_JWT_TOKEN
 ```
 
 ### Update Game Score
+
+**Endpoint:** `/games/updatescore/<date>`  
+**Method:** `PUT`  
+**Protected:** Yes (JWT Required)  
+**Description:** Update the scores of a game and calculate statistics for the players involved.
 
 **Request:**
 ```http
@@ -131,7 +88,19 @@ Content-Type: application/json
 }
 ```
 
+### Get Most Recent Game
+
+**Endpoint:** `/games/most_recent_game`  
+**Method:** `GET`  
+**Protected:** Yes (JWT Required)  
+**Description:** Retrieve information about the most recent game played.
+
 ### Swap Players in a Game
+
+**Endpoint:** `/games/swap_player`  
+**Method:** `PUT`  
+**Protected:** Yes (JWT Required)  
+**Description:** Swap a player's position with a new player in the most recent game. Update team composition and game totals accordingly.
 
 **Request:**
 ```http
@@ -152,7 +121,13 @@ Content-Type: application/json
 }
 ```
 
+
 ### Add New Game
+
+**Endpoint:** `/games`  
+**Method:** `POST`  
+**Protected:** Yes (JWT Required)  
+**Description:** Add a new game record to the database.
 
 **Request:**
 ```http
@@ -183,6 +158,11 @@ Content-Type: application/json
 
 ### Update Game
 
+**Endpoint:** `/games/<date>`  
+**Method:** `PUT`  
+**Protected:** Yes (JWT Required)  
+**Description:** Update an existing game's information using the specified date.
+
 **Request:**
 ```http
 PUT /games/2023-09-01
@@ -203,6 +183,11 @@ Content-Type: application/json
 ```
 
 ### Delete Game
+
+**Endpoint:** `/games/<date>`  
+**Method:** `DELETE`  
+**Protected:** Yes (JWT Required)  
+**Description:** Delete a game record from the database using the specified date.
 
 **Request:**
 ```http
@@ -228,12 +213,54 @@ This API provides endpoints for managing and retrieving player statistics. It en
 **Protected:** Yes (JWT Required)  
 **Description:** Retrieve a list of all players with their statistics.
 
+**Request:**
+```http
+GET /players
+Authorization: Bearer YOUR_JWT_TOKEN
+```
+
+**Response:**
+```json
+[
+  {
+    "name": "Player 1",
+    "total": 77,
+    "wins": 5,
+    "draws": 3,
+    "losses": 2,
+    "score": 16,
+    "playing": true,
+    "played": 10,
+    "percent": 50,
+    "winpercent": 50
+  },
+  // Other player records...
+]
+```
+
 ### Get Player Names
 
 **Endpoint:** `/players/player_names`  
 **Method:** `GET`  
 **Protected:** Yes (JWT Required)  
 **Description:** Retrieve a list of player names and their playing status.
+
+**Request:**
+```http
+GET /players/player_names
+Authorization: Bearer YOUR_JWT_TOKEN
+```
+
+**Response:**
+```json
+[
+  {
+    "name": "Player 1",
+    "playing": true
+  },
+  // Other player names...
+]
+```
 
 ### Get All Player Totals
 
@@ -276,87 +303,6 @@ This API provides endpoints for managing and retrieving player statistics. It en
 **Method:** `POST`  
 **Description:** Add a new player with specified attributes.
 
-### Update All Players
-
-**Endpoint:** `/players`  
-**Method:** `PUT`  
-**Protected:** Yes (JWT Required)  
-**Description:** Update attributes for all players.
-
-### Update Player
-
-**Endpoint:** `/players/<player_name>`  
-**Method:** `PUT`  
-**Description:** Update attributes for a specific player.
-
-### Delete Player
-
-**Endpoint:** `/players/<player_name>`  
-**Method:** `DELETE`  
-**Description:** Delete a specific player from the database.
-
-### Update Playing Players
-
-**Endpoint:** `/players/update_playing`  
-**Method:** `PUT`  
-**Description:** Update the "playing" status to True for specified players.
-
-### Update Not Playing Players
-
-**Endpoint:** `/players/update_notplaying`  
-**Method:** `PUT`  
-**Description:** Update the "playing" status to False for specified players.
-
-## Example Usage
-
-### Get All Players
-
-**Request:**
-```http
-GET /players
-Authorization: Bearer YOUR_JWT_TOKEN
-```
-
-**Response:**
-```json
-[
-  {
-    "name": "Player 1",
-    "total": 77,
-    "wins": 5,
-    "draws": 3,
-    "losses": 2,
-    "score": 16,
-    "playing": true,
-    "played": 10,
-    "percent": 50,
-    "winpercent": 50
-  },
-  // Other player records...
-]
-```
-
-### Get Player Names
-
-**Request:**
-```http
-GET /players/player_names
-Authorization: Bearer YOUR_JWT_TOKEN
-```
-
-**Response:**
-```json
-[
-  {
-    "name": "Player 1",
-    "playing": true
-  },
-  // Other player names...
-]
-```
-
-### Add New Player
-
 **Request:**
 ```http
 POST /players
@@ -384,7 +330,18 @@ Content-Type: application/json
 }
 ```
 
+### Update All Players
+
+**Endpoint:** `/players`  
+**Method:** `PUT`  
+**Protected:** Yes (JWT Required)  
+**Description:** Update attributes for all players.
+
 ### Update Player
+
+**Endpoint:** `/players/<player_name>`  
+**Method:** `PUT`  
+**Description:** Update attributes for a specific player.
 
 **Request:**
 ```http
@@ -406,6 +363,10 @@ Content-Type: application/json
 
 ### Delete Player
 
+**Endpoint:** `/players/<player_name>`  
+**Method:** `DELETE`  
+**Description:** Delete a specific player from the database.
+
 **Request:**
 ```http
 DELETE /players/Player%201
@@ -420,9 +381,34 @@ DELETE /players/Player%201
 
 ### Update Playing Players
 
+**Endpoint:** `/players/update_playing`  
+**Method:** `PUT`  
+**Description:** Update the "playing" status to True for specified players.
+
 **Request:**
 ```http
 PUT /players/update_playing
+Content-Type: application/json
+
+["Player 1", "Player 2"]
+```
+
+**Response:**
+```json
+{
+  "message": "Players updated successfully"
+}
+```
+
+### Update Not Playing Players
+
+**Endpoint:** `/players/update_notplaying`  
+**Method:** `PUT`  
+**Description:** Update the "playing" status to False for specified players.
+
+**Request:**
+```http
+PUT /players/update_notplaying
 Content-Type: application/json
 
 ["Player 1", "Player 2"]
