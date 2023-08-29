@@ -1,5 +1,15 @@
 # Footyapp Backend - REST API
 
+# Create tokens first
+
+This API uses static tokens for each frontend. Generate a token and save in a .env file.
+
+```
+BOT_TOKEN=your-long-token
+WEB_TOKEN=your-other-long-token
+```
+
+
 # API Documentation for Game Management
 
 This API provides endpoints for managing and retrieving game statistics. It allows you to perform various operations such as getting game information, updating game scores, swapping players, and more. Below are the available routes and how to use them:
@@ -30,8 +40,7 @@ Authorization: Bearer YOUR_TOKEN
     "totalTeamB": 80,
     "colourTeamA": "red",
     "colourTeamB": "blue"
-  },
-  // Other game records...
+  }
 ]
 ```
 
