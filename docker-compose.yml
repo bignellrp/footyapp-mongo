@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   footyapp-dev:
-    env_file: /app/tokens/.env
+    env_file: /mnt/user/share/docker/footyapp-api/.env
     image: ghcr.io/bignellrp/footyapp-api:main
     container_name: footyapp-api-${BRANCH}
     networks:
@@ -11,12 +11,12 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - /mnt/user/share/docker/footyapp-api/tokens/:/tokens
+      - /mnt/user/share/docker/footyapp-api/:/tokens
     depends_on:
       - mongodb
 
   mongodb:
-    env_file: .env
+    env_file: /mnt/user/share/docker/footyapp-api/.env
     image: mongo:latest
     networks:
       br0:
@@ -25,10 +25,6 @@ services:
       - "27017:27017"
     volumes:
       - /mnt/user/share/docker/footyapp-api/mongodb_data:/data/db
-      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
-
-volumes:
-  mongodb_data:
 
 networks:
   br0:
