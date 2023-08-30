@@ -2,15 +2,13 @@ version: '3.8'
 
 services:
   footyapp-dev:
-    image: ghcr.io/bignellrp/footyapp-api:latest
+    image: ghcr.io/bignellrp/footyapp-api:main
     container_name: footyapp-api-${BRANCH}
     networks:
       br0:
         ipv4_address: 192.168.0.232
     ports:
       - "8080:80"
-    volumes:
-      - /mnt/user/share/docker/footyapp-api/:/tokens
     depends_on:
       - mongodb
 
@@ -23,6 +21,9 @@ services:
       - "27017:27017"
     volumes:
       - /mnt/user/share/docker/footyapp-api/mongodb_data:/data/db
+    entrypoint: ./init-mongo.sh  # Specify the entrypoint script
+    depends_on:
+      - mongodb  # Ensure the container starts before running the script
 
 networks:
   br0:
