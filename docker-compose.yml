@@ -7,17 +7,18 @@ services:
     networks:
       br0:
         ipv4_address: 192.168.0.232
+    restart: always
     ports:
       - "8080:80"
     depends_on:
       - mongodb
 
   mongodb:
-    build:
-      context: ./mongo
+    image: mongo:latest
     networks:
       br0:
         ipv4_address: 192.168.0.231
+    restart: always
     ports:
       - "27017:27017"
     volumes:
