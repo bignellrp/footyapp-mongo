@@ -2,7 +2,6 @@ version: '3.8'
 
 services:
   footyapp-dev:
-    env_file: /mnt/user/share/docker/footyapp-api/.env
     image: ghcr.io/bignellrp/footyapp-api:main
     container_name: footyapp-api-${BRANCH}
     networks:
@@ -16,7 +15,6 @@ services:
       - mongodb
 
   mongodb:
-    env_file: /mnt/user/share/docker/footyapp-api/.env
     image: mongo:latest
     networks:
       br0:
