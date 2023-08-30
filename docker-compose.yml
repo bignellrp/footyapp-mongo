@@ -13,7 +13,8 @@ services:
       - mongodb
 
   mongodb:
-    image: mongo:latest
+    build:
+      context: ./mongo
     networks:
       br0:
         ipv4_address: 192.168.0.231
@@ -21,7 +22,6 @@ services:
       - "27017:27017"
     volumes:
       - /mnt/user/share/docker/footyapp-api/mongodb_data:/data/db
-    entrypoint: ./init-mongo.sh
 
 networks:
   br0:
