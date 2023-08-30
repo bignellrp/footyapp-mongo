@@ -21,9 +21,7 @@ services:
       - "27017:27017"
     volumes:
       - /mnt/user/share/docker/footyapp-api/mongodb_data:/data/db
-    entrypoint: ./init-mongo.sh  # Specify the entrypoint script
-    depends_on:
-      - mongodb  # Ensure the container starts before running the script
+    entrypoint: ./init-mongo.sh
 
 networks:
   br0:
