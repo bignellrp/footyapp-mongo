@@ -27,7 +27,7 @@ services:
       - /mnt/docker/footyapp-api/.env
     volumes:
       - /mnt/user/share/docker/footyapp-api/mongodb_data:/data/db
-
+      - /mnt/user/share/docker/footyapp-api/init-mongo.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
 networks:
   br0:
     external: true
