@@ -17,7 +17,7 @@ def db_connect():
         # Replace with your MongoDB connection details
         # How can i get the mongo IP as a variable
         mongo_uri = f"mongodb://{mongo_username}:{mongo_password}@{mongo_host}:27017/?authMechanism=DEFAULT&authSource=footyapp"
-        print("Connecting to MongoDB:", mongo_uri)
+        print("Connecting to MongoDB:", mongo_host)
 
         # Connect to MongoDB
         client = MongoClient(mongo_uri)
