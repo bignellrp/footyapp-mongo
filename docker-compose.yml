@@ -7,9 +7,11 @@ services:
     networks:
       br0:
         ipv4_address: 192.168.0.232
-    restart: always
     ports:
       - "8080:80"
+    restart: always
+    env_file:
+      - /mnt/user/share/docker/footyapp-api/.env
     depends_on:
       - mongodb
 
@@ -18,9 +20,11 @@ services:
     networks:
       br0:
         ipv4_address: 192.168.0.231
-    restart: always
     ports:
       - "27017:27017"
+    restart: always
+    env_file:
+      - /mnt/user/share/docker/footyapp-api/.env
     volumes:
       - /mnt/user/share/docker/footyapp-api/mongodb_data:/data/db
 
