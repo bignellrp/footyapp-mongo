@@ -3,12 +3,53 @@
 # Create tokens first
 
 This API uses static tokens for each frontend. Generate a token and save in a .env file.
+An example-env file is included to show the vars needed.
 
 ```
 BOT_TOKEN=your-long-token
 WEB_TOKEN=your-other-long-token
 ```
 
+# Create the init-mongo.js and edit the docker-compose.yml
+
+An example of the init-mongo.js is included.
+
+```
+version: '3.8'
+
+services:
+  footyapp-api:
+    image: ghcr.io/bignellrp/footyapp-api:main
+    container_name: footyapp-api-${BRANCH}
+    networks:
+      br0:
+        ipv4_address: {your-web-ip}
+    ports:
+      - "8080:80"
+    restart: always
+    env_file:
+      - /mnt/docker/footyapp-api/.env
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    networks:
+      br0:
+        ipv4_address: {your-mongo-ip}
+    ports:
+      - "27017:27017"
+    restart: always
+    env_file:
+      - {your-local-envfolder}.env
+    volumes:
+      - {your-local-mongofolder}/mongodb_data:/data/db
+      - {your-local-mongofolder}/init-mongo.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+networks:
+  br0:
+    external: true
+    name: br0
+```
 
 # API Documentation for Game Management
 
@@ -243,7 +284,6 @@ Authorization: Bearer YOUR_TOKEN
     "percent": 50,
     "winpercent": 50
   },
-  // Other player records...
 ]
 ```
 
@@ -267,7 +307,6 @@ Authorization: Bearer YOUR_TOKEN
     "name": "Player 1",
     "playing": true
   },
-  // Other player names...
 ]
 ```
 

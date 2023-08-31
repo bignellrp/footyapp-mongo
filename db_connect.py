@@ -10,8 +10,8 @@ def db_connect():
 
         # Access environment variables
         # Init script might not be working as mongo nonroot user is not working
-        mongo_username = os.getenv("MONGO_INITDB_ROOT_USERNAME")
-        mongo_password = os.getenv("MONGO_INITDB_ROOT_PASSWORD")
+        mongo_username = os.getenv("MONGO_USERNAME")
+        mongo_password = os.getenv("MONGO_PASSWORD")
         mongo_host = os.getenv("MONGO_HOST")
 
         # Replace with your MongoDB connection details

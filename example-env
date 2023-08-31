@@ -1,0 +1,8 @@
+MONGO_USERNAME=username
+MONGO_PASSWORD=password
+MONGO_INITDB_ROOT_USERNAME=initusername
+MONGO_INITDB_ROOT_PASSWORD=initpassword
+JWT_SECRET_KEY=long-secret-key
+BOT_TOKEN=long-secret-key
+WEB_TOKEN=long-secret-key
+MONGO_HOST=172.20.0.2
