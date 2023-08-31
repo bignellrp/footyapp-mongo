@@ -11,7 +11,7 @@ services:
       - "8080:80"
     restart: always
     env_file:
-      - /mnt/user/share/docker/footyapp-api/.env
+      - /mnt/docker/footyapp-api/.env
     depends_on:
       - mongodb
 
@@ -24,7 +24,7 @@ services:
       - "27017:27017"
     restart: always
     env_file:
-      - /mnt/user/share/docker/footyapp-api/.env
+      - /mnt/docker/footyapp-api/.env
     volumes:
       - /mnt/user/share/docker/footyapp-api/mongodb_data:/data/db
 
