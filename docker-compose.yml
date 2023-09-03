@@ -12,6 +12,8 @@ services:
     restart: always
     env_file:
       - /mnt/docker/footyapp-api/.env
+    environment:
+      - TZ=Europe/London
     depends_on:
       - mongodb
 
@@ -28,6 +30,9 @@ services:
     volumes:
       - /mnt/user/share/docker/footyapp-api/mongodb_data:/data/db
       - /mnt/user/share/docker/footyapp-api/init-mongo.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    environment:
+      - TZ=Europe/London
+
 networks:
   br0:
     external: true
