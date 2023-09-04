@@ -243,3 +243,25 @@ def update_not_playing_players():
         return jsonify({"message": "Players updated successfully"})
     else:
         return jsonify({"message": "No players were updated"})
+
+@players_bp.route('/players/all_players_by_channel/<channel>', methods=['GET'])
+#@jwt_required()
+def get_all_players_by_channel(channel):
+
+    # Find all players from players collection
+    players = players_collection.find()
+    
+    #Example output:
+    # [{'name': 'Amy', 'total': 77}, 
+    # {'name': 'Cal', 'total': 77}, 
+    # {'name': 'Joe', 'total': 77}, 
+    # {'name': 'Rik', 'total': 77}]
+
+    # Sort players by name in alphabetical order
+    sorted_players = sorted(players, key=lambda player: player["name"])
+
+    # Create the playing_players list with name
+    playing_players = [
+        {"name": player["name"], "total": player["total"]} for player in sorted_players if player.get("channelid") == channel
+    ]
+    return jsonify(playing_players)
