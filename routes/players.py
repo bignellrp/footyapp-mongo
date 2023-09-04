@@ -58,8 +58,8 @@ def get_player_names():
             {"name": player["name"], "playing": player["playing"]} for player in sorted_players
         ]
         return jsonify(player_names)
-    except jwt.exceptions.InvalidTokenError:
-        return jsonify({"msg": "Invalid token"}), 401
+    # except jwt.exceptions.InvalidTokenError:
+    #     return jsonify({"msg": "Invalid token"}), 401
     except Exception as e:
         print("An error occurred:", e)
         return jsonify({"msg": "An error occurred"}), 500
@@ -265,3 +265,27 @@ def get_all_players_by_channel(channel):
         {"name": player["name"], "total": player["total"]} for player in sorted_players if player.get("channelid") == channel
     ]
     return jsonify(playing_players)
+
+@players_bp.route('/players/player_names_by_channel/<channel>', methods=['GET'])
+#@jwt_required()
+def get_player_names_by_channel(channel):
+    try:
+        players = players_collection.find()
+
+        #Example output:
+        # {'name': 'Amy', 'playing': True}, 
+        # {'name': 'Cal', 'playing': False}, 
+        # {'name': 'Player 15', 'playing': True}, 
+        # {'name': 'Rik', 'playing': True}
+
+        # Sort players by name in alphabetical order
+        sorted_players = sorted(players, key=lambda player: player["name"])
+
+        # Create the player_names list with name and playing status
+        player_names = [
+            {"name": player["name"], "playing": player["playing"]} for player in sorted_players if player.get("channelid") == channel
+        ]
+        return jsonify(player_names)
+    except Exception as e:
+        print("An error occurred:", e)
+        return jsonify({"msg": "An error occurred"}), 500
