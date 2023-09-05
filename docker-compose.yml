@@ -19,6 +19,7 @@ services:
 
   mongodb:
     image: mongo:latest
+    container_name: footyapp-db-${BRANCH}
     networks:
       br0:
         ipv4_address: 192.168.0.241
