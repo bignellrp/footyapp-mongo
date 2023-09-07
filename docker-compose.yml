@@ -2,16 +2,16 @@ version: '3.8'
 
 services:
   footyapp-api:
-    image: ghcr.io/bignellrp/footyapp-api:dev
+    image: ghcr.io/bignellrp/footyapp-api:${BRANCH}
     container_name: footyapp-api-${BRANCH}
     networks:
       br0:
-        ipv4_address: 192.168.0.242
+        ipv4_address: ${API_IPV4_ADDRESS}
     ports:
       - "80:80"
     restart: always
     env_file:
-      - /mnt/docker/footyapp-api-dev/.env
+      - /mnt/docker/footyapp-api-${BRANCH}/.env
     environment:
       - TZ=Europe/London
     depends_on:
@@ -22,15 +22,15 @@ services:
     container_name: footyapp-db-${BRANCH}
     networks:
       br0:
-        ipv4_address: 192.168.0.241
+        ipv4_address: ${DB_IPV4_ADDRESS}
     ports:
       - "27017:27017"
     restart: always
     env_file:
-      - /mnt/docker/footyapp-api-dev/.env
+      - /mnt/docker/footyapp-api-${BRANCH}/.env
     volumes:
-      - /mnt/user/share/docker/footyapp-api-dev/mongodb_data:/data/db
-      - /mnt/user/share/docker/footyapp-api-dev/init-mongo.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - /mnt/user/share/docker/footyapp-api-${BRANCH}/mongodb_data:/data/db
+      - /mnt/user/share/docker/footyapp-api-${BRANCH}/init-mongo.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     environment:
       - TZ=Europe/London
 
