@@ -81,8 +81,12 @@ def update_score(date):
         }
     score = request.json
     games_collection.update_one({"date": date}, {"$set": score})
-    if score["scoreTeamA"] > score["scoreTeamB"]:
-        print("Team A Won! Updating stats.")
+    updated_teama_score = score["scoreTeamA"]
+    updated_teamb_score = score["scoreTeamB"]
+    updated_teama_score = int(updated_teama_score)
+    updated_teamb_score = int(updated_teamb_score)
+    if updated_teama_score > updated_teamb_score:
+        print(f"TeamA:{updated_teama_score} is greater than TeamB: {updated_teamb_score} so Team A Won! Updating stats.")
         for player in game_record["teamA"]:
             players_collection.update_one({"name": player},{"$inc": {"wins": 1}})
             players_collection.update_one({"name": player},{"$inc": {"played": 1}})
@@ -90,8 +94,8 @@ def update_score(date):
         for player in game_record["teamB"]:
             players_collection.update_one({"name": player},{"$inc": {"losses": 1}})
             players_collection.update_one({"name": player},{"$inc": {"played": 1}})
-    elif score["scoreTeamA"] < score["scoreTeamB"]:
-        print("Team B Won! Updating stats.")
+    elif updated_teama_score < updated_teamb_score:
+        print(f"TeamA:{updated_teama_score} is less than TeamB: {updated_teamb_score} so Team B Won! Updating stats.")
         for player in game_record["teamB"]:
             players_collection.update_one({"name": player},{"$inc": {"wins": 1}})
             players_collection.update_one({"name": player},{"$inc": {"played": 1}})
@@ -99,8 +103,8 @@ def update_score(date):
         for player in game_record["teamA"]:
             players_collection.update_one({"name": player},{"$inc": {"losses": 1}})
             players_collection.update_one({"name": player},{"$inc": {"played": 1}})
-    elif score["scoreTeamA"] == score["scoreTeamB"]:
-        print("Draw! Updating stats.")
+    elif updated_teama_score == updated_teamb_score:
+        print(f"TeamA:{updated_teama_score} is the same as TeamB: {updated_teamb_score} so Draw! Updating stats.")
         for player in game_record["teamB"]:
             players_collection.update_one({"name": player},{"$inc": {"draws": 1}})
             players_collection.update_one({"name": player},{"$inc": {"played": 1}})
