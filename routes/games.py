@@ -65,79 +65,86 @@ def get_game_wins(player):
 @games_bp.route('/games/updatescore/<date>', methods=['PUT'])
 #@jwt_required()
 def update_score(date):
-    game = games_collection.find_one({"date": date})
-    if game:
-        game["date"] = datetime.strptime(game["date"], '%Y-%m-%d')
-        game_record = {
-            "date": game["date"].strftime('%Y-%m-%d'),
-            "teamA": game["teamA"],
-            "teamB": game["teamB"],
-            "scoreTeamA": game["scoreTeamA"],
-            "scoreTeamB": game["scoreTeamB"],
-            "totalTeamA": game["totalTeamA"],
-            "totalTeamB": game["totalTeamB"],
-            "colourTeamA": game["colourTeamA"],
-            "colourTeamB": game["colourTeamB"]
-        }
-    score = request.json
-    games_collection.update_one({"date": date}, {"$set": score})
-    updated_teama_score = score["scoreTeamA"]
-    updated_teamb_score = score["scoreTeamB"]
-    updated_teama_score = int(updated_teama_score)
-    updated_teamb_score = int(updated_teamb_score)
-    if updated_teama_score > updated_teamb_score:
-        print(f"TeamA:{updated_teama_score} is greater than TeamB: {updated_teamb_score} so Team A Won! Updating stats.")
-        for player in game_record["teamA"]:
-            players_collection.update_one({"name": player},{"$inc": {"wins": 1}})
-            players_collection.update_one({"name": player},{"$inc": {"played": 1}})
-            players_collection.update_one({"name": player},{"$inc": {"score": 3}})
-        for player in game_record["teamB"]:
-            players_collection.update_one({"name": player},{"$inc": {"losses": 1}})
-            players_collection.update_one({"name": player},{"$inc": {"played": 1}})
-    elif updated_teama_score < updated_teamb_score:
-        print(f"TeamA:{updated_teama_score} is less than TeamB: {updated_teamb_score} so Team B Won! Updating stats.")
-        for player in game_record["teamB"]:
-            players_collection.update_one({"name": player},{"$inc": {"wins": 1}})
-            players_collection.update_one({"name": player},{"$inc": {"played": 1}})
-            players_collection.update_one({"name": player},{"$inc": {"score": 3}})
-        for player in game_record["teamA"]:
-            players_collection.update_one({"name": player},{"$inc": {"losses": 1}})
-            players_collection.update_one({"name": player},{"$inc": {"played": 1}})
-    elif updated_teama_score == updated_teamb_score:
-        print(f"TeamA:{updated_teama_score} is the same as TeamB: {updated_teamb_score} so Draw! Updating stats.")
-        for player in game_record["teamB"]:
-            players_collection.update_one({"name": player},{"$inc": {"draws": 1}})
-            players_collection.update_one({"name": player},{"$inc": {"played": 1}})
-            players_collection.update_one({"name": player},{"$inc": {"score": 1}})
-        for player in game_record["teamA"]:
-            players_collection.update_one({"name": player},{"$inc": {"draws": 1}})
-            players_collection.update_one({"name": player},{"$inc": {"played": 1}})
-            players_collection.update_one({"name": player},{"$inc": {"score": 1}})
-    #Need to make sure the player_collection is updated by the above first
-    for player in game_record["teamA"] or game_record["teamB"]:
-        findplayer = players_collection.find_one({"name": player})
-        if findplayer:
-            player_record = {
-                "name": findplayer["name"],
-                "total": findplayer["total"],
-                "wins": findplayer["wins"],
-                "draws": findplayer["draws"],
-                "losses": findplayer["losses"],
-                "score": findplayer["score"],
-                "playing": findplayer["playing"],
-                "played": findplayer["played"],
-                "percent": findplayer["percent"],
-                "winpercent": findplayer["winpercent"]
+    try:
+        game = games_collection.find_one({"date": date})
+        if not game:
+            # If the game with the given date is not found, return a response indicating it wasn't found.
+            return jsonify({"message": "Game not found"}), 404
+        game = games_collection.find_one({"date": date})
+        if game:
+            game["date"] = datetime.strptime(game["date"], '%Y-%m-%d')
+            game_record = {
+                "date": game["date"].strftime('%Y-%m-%d'),
+                "teamA": game["teamA"],
+                "teamB": game["teamB"],
+                "scoreTeamA": game["scoreTeamA"],
+                "scoreTeamB": game["scoreTeamB"],
+                "totalTeamA": game["totalTeamA"],
+                "totalTeamB": game["totalTeamB"],
+                "colourTeamA": game["colourTeamA"],
+                "colourTeamB": game["colourTeamB"]
             }
-        percentage = player_record["wins"] / player_record["played"] * 100
-        percentage = int(round(percentage))
-        if player_record["wins"] < 5:
-            winpercentage = 0
-        else:
-            winpercentage = percentage
-        players_collection.update_one({"name": player},{"$set": {"percent": percentage}})
-        players_collection.update_one({"name": player},{"$set": {"winpercent": winpercentage}})
-    return jsonify({"message": "Game updated successfully"})
+        score = request.json
+        games_collection.update_one({"date": date}, {"$set": score})
+        updated_teama_score = score["scoreTeamA"]
+        updated_teamb_score = score["scoreTeamB"]
+        updated_teama_score = int(updated_teama_score)
+        updated_teamb_score = int(updated_teamb_score)
+        if updated_teama_score > updated_teamb_score:
+            print(f"TeamA:{updated_teama_score} is greater than TeamB:{updated_teamb_score} so Team A Won! Updating stats.")
+            for player in game_record["teamA"]:
+                players_collection.update_one({"name": player},{"$inc": {"wins": 1}})
+                players_collection.update_one({"name": player},{"$inc": {"played": 1}})
+                players_collection.update_one({"name": player},{"$inc": {"score": 3}})
+            for player in game_record["teamB"]:
+                players_collection.update_one({"name": player},{"$inc": {"losses": 1}})
+                players_collection.update_one({"name": player},{"$inc": {"played": 1}})
+        elif updated_teama_score < updated_teamb_score:
+            print(f"TeamA:{updated_teama_score} is less than TeamB:{updated_teamb_score} so Team B Won! Updating stats.")
+            for player in game_record["teamB"]:
+                players_collection.update_one({"name": player},{"$inc": {"wins": 1}})
+                players_collection.update_one({"name": player},{"$inc": {"played": 1}})
+                players_collection.update_one({"name": player},{"$inc": {"score": 3}})
+            for player in game_record["teamA"]:
+                players_collection.update_one({"name": player},{"$inc": {"losses": 1}})
+                players_collection.update_one({"name": player},{"$inc": {"played": 1}})
+        elif updated_teama_score == updated_teamb_score:
+            print(f"TeamA:{updated_teama_score} is the same as TeamB:{updated_teamb_score} so Draw! Updating stats.")
+            for player in game_record["teamB"]:
+                players_collection.update_one({"name": player},{"$inc": {"draws": 1}})
+                players_collection.update_one({"name": player},{"$inc": {"played": 1}})
+                players_collection.update_one({"name": player},{"$inc": {"score": 1}})
+            for player in game_record["teamA"]:
+                players_collection.update_one({"name": player},{"$inc": {"draws": 1}})
+                players_collection.update_one({"name": player},{"$inc": {"played": 1}})
+                players_collection.update_one({"name": player},{"$inc": {"score": 1}})
+        #Need to make sure the player_collection is updated by the above first
+        for player in game_record["teamA"] or game_record["teamB"]:
+            findplayer = players_collection.find_one({"name": player})
+            if findplayer:
+                player_record = {
+                    "name": findplayer["name"],
+                    "total": findplayer["total"],
+                    "wins": findplayer["wins"],
+                    "draws": findplayer["draws"],
+                    "losses": findplayer["losses"],
+                    "score": findplayer["score"],
+                    "playing": findplayer["playing"],
+                    "played": findplayer["played"],
+                    "percent": findplayer["percent"],
+                    "winpercent": findplayer["winpercent"]
+                }
+            percentage = player_record["wins"] / player_record["played"] * 100
+            percentage = int(round(percentage))
+            if player_record["wins"] < 5:
+                winpercentage = 0
+            else:
+                winpercentage = percentage
+            players_collection.update_one({"name": player},{"$set": {"percent": percentage}})
+            players_collection.update_one({"name": player},{"$set": {"winpercent": winpercentage}})
+        return jsonify({"message": "Game updated successfully"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @games_bp.route('/games/most_recent_game', methods=['GET'])
 #@jwt_required()
