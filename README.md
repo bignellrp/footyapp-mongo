@@ -1,6 +1,56 @@
 # Footyapp Backend - REST API
 
-# Create tokens first
+This is the Footyapp backend. This was rewritten from scratch to breakdown the original Footyapp monolith to benefit from the following 3 tier application princeiples.
+
+# 3-Tier RESTful Application Principles:
+
+## 1. Separation of Concerns:
+- **Presentation Layer (Web)**: Handles the user interface and user experience. Responsible for displaying information to users and gathering user input. Built with Flask templates.
+- **Application Layer (API)**: Business logic and operations. Offers an interface to the client via RESTful endpoints. Manages data transformation and processing. Implemented using Flask routes.
+- **Data Layer (Database)**: Data persistence and storage. MongoDB serves as the NoSQL database to store, retrieve, and manage data.
+
+## 2. Statelessness:
+- Every HTTP request from the client to server should contain all the information needed to understand and process the request.
+
+## 3. Modularity:
+- Develop the application in distinct modules to promote reusability and ease of maintenance.
+
+## 4. Scalability:
+- Design the application to easily handle an increase in user load by potentially scaling horizontally (adding more servers).
+
+## 5. Data Integrity:
+- Ensure that the data stored in MongoDB is valid, consistent, and accurate.
+
+## 6. Security:
+- Implement authentication and authorisation mechanisms.
+- Use HTTPS for secure communication.
+- Sanitise user inputs to prevent SQL (or NoSQL) injection attacks.
+- Handle and store passwords securely (hashing & salting).
+
+## 7. Error Handling:
+- Gracefully handle exceptions and errors at all layers. Provide meaningful error messages to clients.
+
+## 8. Performance Optimisation:
+- Efficiently use database indices in MongoDB to speed up queries.
+- Minimise payload sizes, and consider caching frequently used data.
+- Optimise Flask routes and operations for performance.
+
+## 9. API Versioning:
+- To maintain backward compatibility, versions of your API can be defined, allowing older apps to function without modifications.
+
+## 10. Documentation:
+- Maintain clear and comprehensive documentation for API endpoints, usage, and data models.
+
+## 11. Testing:
+- Implement unit, integration, and system tests to ensure application stability and correctness. Utilise tools like `pytest` for testing.
+
+## 12. Continuous Integration & Continuous Deployment (CI/CD):
+- Automate testing and deployment processes to ensure code quality and quick, reliable releases.
+
+
+# Using the API
+
+## Create tokens first
 
 This API uses static tokens for each frontend. Generate a token and save in a .env file.
 An example-env file is included to show the vars needed.
@@ -10,7 +60,7 @@ BOT_TOKEN=your-long-token
 WEB_TOKEN=your-other-long-token
 ```
 
-# Create the init-mongo.js and edit the docker-compose.yml
+## Create the init-mongo.js and edit the docker-compose.yml
 
 An example of the init-mongo.js is included.
 
