@@ -92,6 +92,33 @@ Authorization: Bearer YOUR_TOKEN
 **Protected:** Yes (TOKEN Required)  
 **Description:** Retrieve game statistics, including dates and scores, sorted by date in descending order.
 
+**Request:**
+```http
+GET /games/game_stats
+Authorization: Bearer YOUR_TOKEN
+```
+
+**Response:**
+```json
+[
+  {
+    "date": "2023-08-30",
+    "scoreTeamA": 3,
+    "scoreTeamB": 2,
+  },
+  {
+    "date": "2023-08-23",
+    "scoreTeamA": 3,
+    "scoreTeamB": 2,
+  },
+  {
+    "date": "2023-08-16",
+    "scoreTeamA": 3,
+    "scoreTeamB": 2,
+  }
+]
+```
+
 ### Get Player's Wins
 
 **Endpoint:** `/games/wins/<player>`  
@@ -145,6 +172,29 @@ Content-Type: application/json
 **Protected:** Yes (TOKEN Required)  
 **Description:** Retrieve information about the most recent game played.
 
+**Request:**
+```http
+GET /games/most_recent_game
+Authorization: Bearer YOUR_TOKEN
+```
+
+**Response:**
+```json
+[
+  {
+    "date": "2023-08-30",
+    "teamA": ["Player 1", "Player 2"],
+    "teamB": ["Player 3", "Player 4"],
+    "scoreTeamA": 3,
+    "scoreTeamB": 2,
+    "totalTeamA": 100,
+    "totalTeamB": 80,
+    "colourTeamA": "red",
+    "colourTeamB": "blue"
+  }
+]
+```
+
 ### Swap Players in a Game
 
 **Endpoint:** `/games/swap_player`  
@@ -159,7 +209,7 @@ Authorization: Bearer YOUR_TOKEN
 Content-Type: application/json
 
 {
-  "current_player": "Player1",
+  "current_player": "CurrPlayer",
   "new_player": "NewPlayer"
 }
 ```
@@ -171,6 +221,31 @@ Content-Type: application/json
 }
 ```
 
+### Update Score
+
+**Endpoint:** `/games/updatescore/<date>`  
+**Method:** `PUT`  
+**Protected:** Yes (TOKEN Required)  
+**Description:** Update an existing game's score using the specified date. Once scores saved this function also runs the wins/draws/losses formulas for each player. 3 points for a win, 1 for a draw, 0 for a loss, games played +1, winpercentage.
+
+**Request:**
+```http
+PUT /games/updatescore2023-09-01
+Authorization: Bearer YOUR_TOKEN
+Content-Type: application/json
+
+{
+  "scoreTeamA": 3,
+  "scoreTeamB": 3
+}
+```
+
+**Response:**
+```json
+{
+  "message": "Game updated successfully"
+}
+```
 
 ### Add New Game
 
@@ -317,19 +392,83 @@ Authorization: Bearer YOUR_TOKEN
 **Protected:** Yes (TOKEN Required)  
 **Description:** Retrieve a list of all player names and their total scores.
 
+**Request:**
+```http
+GET /players/all_players
+Authorization: Bearer YOUR_TOKEN
+```
+
+**Response:**
+```json
+[
+  {
+    "name": "Player 1",
+    "total": 77
+  },
+]
+```
+
 ### Get Player Stats
 
 **Endpoint:** `/players/player_stats`  
 **Method:** `GET`  
 **Protected:** Yes (TOKEN Required)  
-**Description:** Retrieve detailed statistics for each player, including wins, draws, losses, and more.
+**Description:** Retrieve detailed statistics for each player, including wins, draws, losses, score and winpercentage.
+
+**Request:**
+```http
+GET /players/player_stats
+Authorization: Bearer YOUR_TOKEN
+```
+
+**Response:**
+```json
+[
+  {
+    "name": "Player 1",
+    "wins": 5,
+    "draws": 3,
+    "losses": 2,
+    "score": 16,
+    "winpercent": 50
+  },
+]
+```
 
 ### Get Leaderboard
 
 **Endpoint:** `/players/leaderboard`  
 **Method:** `GET`  
 **Protected:** Yes (TOKEN Required)  
-**Description:** Retrieve a leaderboard of the top players based on their scores.
+**Description:** Retrieve a leaderboard of the top 10 players based on their scores.
+
+**Request:**
+```http
+GET /players/leaderboard
+Authorization: Bearer YOUR_TOKEN
+```
+
+**Response:**
+```json
+[
+  {
+    "name": "Player 1",
+    "score": 99
+  },
+  {
+    "name": "Player 2",
+    "score": 88
+  },
+  {
+    "name": "Player 3",
+    "score": 77
+  },
+  {
+    "name": "Player 4",
+    "score": 66
+  },
+]
+```
 
 ### Get Win Percentages
 
@@ -338,12 +477,64 @@ Authorization: Bearer YOUR_TOKEN
 **Protected:** Yes (TOKEN Required)  
 **Description:** Retrieve win percentages for each player.
 
+**Request:**
+```http
+GET /players/winpercentage
+Authorization: Bearer YOUR_TOKEN
+```
+
+**Response:**
+```json
+[
+  {
+    "name": "Player 1",
+    "winpercent": 99
+  },
+  {
+    "name": "Player 2",
+    "winpercent": 88
+  },
+  {
+    "name": "Player 3",
+    "winpercent": 77
+  },
+  {
+    "name": "Player 4",
+    "winpercent": 66
+  },
+]
+```
+
 ### Get Game Player Tally
 
 **Endpoint:** `/players/game_player_tally`  
 **Method:** `GET`  
 **Protected:** Yes (TOKEN Required)  
-**Description:** Retrieve a list of players currently playing in games.
+**Description:** Retrieve a list of players currently playing in games. e.g if playing is true
+
+**Request:**
+```http
+GET /players/game_player_tally
+Authorization: Bearer YOUR_TOKEN
+```
+
+**Response:**
+```json
+[
+  {
+    "name": "Player 1"
+  },
+  {
+    "name": "Player 2"
+  },
+  {
+    "name": "Player 3"
+  },
+  {
+    "name": "Player 4"
+  },
+]
+```
 
 ### Add New Player
 
@@ -384,6 +575,57 @@ Content-Type: application/json
 **Method:** `PUT`  
 **Protected:** Yes (TOKEN Required)  
 **Description:** Update attributes for all players.
+
+**Request:**
+```http
+PUT /players
+Content-Type: application/json
+
+{
+  "name": "New Player",
+  "total": 0,
+  "wins": 0,
+  "draws": 0,
+  "losses": 0,
+  "score": 0,
+  "playing": true,
+  "played": 0,
+  "percent": 0,
+  "winpercent": 0
+},
+{
+  "name": "New Player",
+  "total": 0,
+  "wins": 0,
+  "draws": 0,
+  "losses": 0,
+  "score": 0,
+  "playing": true,
+  "played": 0,
+  "percent": 0,
+  "winpercent": 0
+},
+{
+  "name": "New Player",
+  "total": 0,
+  "wins": 0,
+  "draws": 0,
+  "losses": 0,
+  "score": 0,
+  "playing": true,
+  "played": 0,
+  "percent": 0,
+  "winpercent": 0
+}
+```
+
+**Response:**
+```json
+{
+  "_id": "YOUR_GENERATED_ID",
+  "message": "Players added successfully"
+}
+```
 
 ### Update Player
 
