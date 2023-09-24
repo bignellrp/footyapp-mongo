@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from routes import players, games  # Import routes from the routes folder
+from routes import players, games, tenant  # Import routes from the routes folder
 #from flask_jwt_extended import JWTManager # Import JWT for token auth
 from dotenv import load_dotenv
 import os
@@ -38,6 +38,7 @@ def before_request():
 # Register the routes from the imported route files
 app.register_blueprint(players.players_bp)
 app.register_blueprint(games.games_bp)
+app.register_blueprint(tenant.tenant_bp)
 #app.register_blueprint(login.login_bp)
 
 # Run the app

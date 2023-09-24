@@ -24,11 +24,14 @@ def db_connect():
         db = client['footyapp']
         players_collection = db['players']
         games_collection = db['games']
+        tenant_collection = db['tenant']
 
-        # Create a unique index on the 'name' field
+        # Create a unique index on the players collection
         db.players.create_index([("name", ASCENDING)], unique=True)
-        # Create a unique index on the 'name' field
+        # Create a unique index on the games collection
         db.games.create_index([("date", ASCENDING)], unique=True)
+        # Create a unique index on the tenant collection
+        db.tenant.create_index([("teamname", ASCENDING)], unique=True)
 
         print("Database connection successfull!")
 
@@ -42,10 +45,16 @@ def db_connect():
             with open('games.json', 'r') as games_file:
                 games_data = json.load(games_file)
                 games_collection.insert_one(games_data)
+
+            # Insert tenant data from tenant.json
+            with open('tenant.json', 'r') as tenant_file:
+                tenant_data = json.load(tenant_file)
+                tenant_collection.insert_one(tenant_data)
+
         except Exception as e:
             print("Duplicate data detected:", e)
 
     except Exception as e:
         print("Error connecting to MongoDB:", e)
         
-    return players_collection, games_collection
+    return players_collection, games_collection, tenant_collection

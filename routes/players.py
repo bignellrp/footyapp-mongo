@@ -6,7 +6,7 @@ from db_connect import db_connect
 players_bp = Blueprint("players", __name__)
 
 # Connect to the database
-players_collection, games_collection = db_connect()
+players_collection, games_collection, tenant_collection = db_connect()
 
 # Routes for Players
 

@@ -1,0 +1,7 @@
+{
+    "teamname": "default",
+    "channelid": {
+      "$numberLong": "0000000000000000000"
+    },
+    "playernum": 10
+  }
