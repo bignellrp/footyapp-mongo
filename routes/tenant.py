@@ -10,18 +10,13 @@ players_collection, games_collection, tenant_collection = db_connect()
 
 # Routes for Tenant
 
-@tenant_bp.route('/tenant', methods=['GET'])
-#@jwt_required()
-def get_tenant_info():
-    tenants = tenant_collection.find()
-    tenant_list =   [   {
-                            "teamname": tenant["teamname"],
-                            "channelid": tenant["channelid"],
-                            "playernum": tenant["playernum"]
-                        } 
-                    for tenant in tenants
-                    ]
-    return jsonify(tenant_list)
+@tenant_bp.route('/tenant/<teamname>', methods=['GET'])
+def get_tenant_info(teamname):
+    tenant = tenant_collection.find_one({'teamname': teamname})
+    if tenant is not None:
+        return jsonify({"playernum": tenant["playernum"],"channelid": tenant["channelid"]})
+    else:
+        return jsonify({"error": "Team not found"}), 404
 
 @tenant_bp.route('/tenant/<teamname>', methods=['PUT'])
 #@jwt_required()
