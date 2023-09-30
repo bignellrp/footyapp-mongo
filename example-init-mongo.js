@@ -12,3 +12,4 @@ db.createUser(
 );
 db.createCollection("games");
 db.createCollection("players");
+db.createCollection("tenant");

@@ -5,7 +5,7 @@ from datetime import datetime
 
 
 games_bp = Blueprint("games", __name__)
-players_collection, games_collection = db_connect()
+players_collection, games_collection, tenant_collection = db_connect()
 
 # Routes for Games
 @games_bp.route('/games', methods=['GET'])
