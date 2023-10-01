@@ -173,7 +173,7 @@ def get_most_recent_game():
 
 @games_bp.route('/games/teama', methods=['GET'])
 #@jwt_required()
-def get_most_recent_game():
+def get_teama():
     games = list(games_collection.find())  # Convert cursor to a list
     if not games:  # We return an empty array if no games found
         return jsonify([])
@@ -193,7 +193,7 @@ def get_most_recent_game():
 
 @games_bp.route('/games/teamb', methods=['GET'])
 #@jwt_required()
-def get_most_recent_game():
+def get_teamb():
     games = list(games_collection.find())  # Convert cursor to a list
     if not games:  # We return an empty array if no games found
         return jsonify([])
