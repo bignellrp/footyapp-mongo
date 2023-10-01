@@ -171,6 +171,46 @@ def get_most_recent_game():
                     ]
     return jsonify(game_list)
 
+@games_bp.route('/games/teama', methods=['GET'])
+#@jwt_required()
+def get_most_recent_game():
+    games = list(games_collection.find())  # Convert cursor to a list
+    if not games:  # We return an empty array if no games found
+        return jsonify([])
+
+    for game in games:
+        game["date"] = datetime.strptime(game["date"], '%Y-%m-%d')
+
+    # Sort games by date in descending order
+    sorted_games = sorted(games, key=lambda game: game["date"], reverse=True)
+    
+    # Get 'teamA' of the most recent game
+    most_recent_team_a = sorted_games[0]["teamA"]
+
+    # Create an array containing 'teamA' field from the most recent game.
+    team_a_list = [most_recent_team_a]
+    return jsonify(team_a_list)
+
+@games_bp.route('/games/teamb', methods=['GET'])
+#@jwt_required()
+def get_most_recent_game():
+    games = list(games_collection.find())  # Convert cursor to a list
+    if not games:  # We return an empty array if no games found
+        return jsonify([])
+
+    for game in games:
+        game["date"] = datetime.strptime(game["date"], '%Y-%m-%d')
+
+    # Sort games by date in descending order
+    sorted_games = sorted(games, key=lambda game: game["date"], reverse=True)
+    
+    # Get 'teamA' of the most recent game
+    most_recent_team_b = sorted_games[0]["teamB"]
+
+    # Create an array containing 'teamA' field from the most recent game.
+    team_b_list = [most_recent_team_b]
+    return jsonify(team_b_list)
+
 @games_bp.route('/games/swap_player', methods=['PUT'])
 #@jwt_required()
 def swap_player():
