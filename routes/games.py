@@ -186,10 +186,11 @@ def get_teama():
     
     # Get 'teamA' of the most recent game
     most_recent_team_a = sorted_games[0]["teamA"]
-
+    most_recent_date = sorted_games[0]["date"].strftime('%Y-%m-%d')
+    
     # Create an array containing 'teamA' field from the most recent game.
     team_a_list = [most_recent_team_a]
-    return jsonify(team_a_list)
+    return jsonify({"teamA": team_a_list, "date": most_recent_date})
 
 @games_bp.route('/games/teamb', methods=['GET'])
 #@jwt_required()
@@ -206,10 +207,11 @@ def get_teamb():
     
     # Get 'teamA' of the most recent game
     most_recent_team_b = sorted_games[0]["teamB"]
-
+    most_recent_date = sorted_games[0]["date"].strftime('%Y-%m-%d')
+    
     # Create an array containing 'teamA' field from the most recent game.
     team_b_list = [most_recent_team_b]
-    return jsonify(team_b_list)
+    return jsonify({"teamB": team_b_list, "date": most_recent_date})
 
 @games_bp.route('/games/swap_player', methods=['PUT'])
 #@jwt_required()
