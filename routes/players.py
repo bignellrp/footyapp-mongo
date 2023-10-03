@@ -207,6 +207,23 @@ def update_player(player_name):
     else:
         return jsonify({"message": "Player not found or no changes applied"})
 
+@players_bp.route('/players/goals/<player_name>', methods=['PUT'])
+#@jwt_required()
+def update_player_goals(player_name):
+    updated_data = request.json  # New values to update for the specific player
+
+    # Use the "$inc" operator to add incoming goals to the existing ones
+    update_goal = {"$inc": {"goals": updated_data["goals"]}}
+
+    # Update the specific player by matching the unique identifier
+    result = players_collection.update_one({"name": player_name}, update_goal)
+
+    if result.modified_count > 0:
+        return jsonify({"message": "Player's goal count updated successfully"})
+    else:
+        return jsonify({"message": "Player not found or no changes applied"})
+
+
 @players_bp.route('/players/<player_name>', methods=['DELETE'])
 #@jwt_required()
 def delete_player(player_name):
