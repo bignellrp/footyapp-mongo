@@ -133,7 +133,7 @@ def get_leaderboard():
 
     # Create the leaderboard list with name and score
     leaderboard = [
-        {"name" : player["name"],"score" : player["score"]} for player in top_players
+        {"name" : player["name"],"score" : player["score"],"goals" : player["goals"]} for player in top_players
     ]
     return jsonify(leaderboard)
 

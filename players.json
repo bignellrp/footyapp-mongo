@@ -9,6 +9,7 @@
       "playing": true,
       "played": 0,
       "percent": 0,
-      "winpercent": 0
+      "winpercent": 0,
+      "goals": 0
     }
 ]
