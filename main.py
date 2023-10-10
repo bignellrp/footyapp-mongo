@@ -19,7 +19,8 @@ app = Flask(__name__)
 
 API_KEYS = {
     "bot": os.getenv("BOT_TOKEN"),
-    "web": os.getenv("WEB_TOKEN")
+    "web": os.getenv("WEB_TOKEN"),
+    "watch": os.getenv("WATCH_TOKEN")
 }
 
 def authorize_request(authorization_header):

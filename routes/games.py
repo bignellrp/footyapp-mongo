@@ -171,6 +171,50 @@ def get_most_recent_game():
                     ]
     return jsonify(game_list)
 
+@games_bp.route('/games/teama', methods=['GET'])
+#@jwt_required()
+def get_teama():
+    games = list(games_collection.find())  # Convert cursor to a list
+    if not games:  # We return an empty array if no games found
+        return jsonify([])
+
+    for game in games:
+        game["date"] = datetime.strptime(game["date"], '%Y-%m-%d')
+
+    # Sort games by date in descending order
+    sorted_games = sorted(games, key=lambda game: game["date"], reverse=True)
+    
+    # Get 'teamA' of the most recent game
+    most_recent_team_a = sorted_games[0]["teamA"]
+    most_recent_date = sorted_games[0]["date"].strftime('%Y-%m-%d')
+    most_recent_colour_a = sorted_games[0]["colourTeamA"]
+    
+    # Create an array containing 'teamA' field from the most recent game.
+    team_a_list = [most_recent_team_a]
+    return jsonify({"teamA": team_a_list, "date": most_recent_date, "colourA": most_recent_colour_a})
+
+@games_bp.route('/games/teamb', methods=['GET'])
+#@jwt_required()
+def get_teamb():
+    games = list(games_collection.find())  # Convert cursor to a list
+    if not games:  # We return an empty array if no games found
+        return jsonify([])
+
+    for game in games:
+        game["date"] = datetime.strptime(game["date"], '%Y-%m-%d')
+
+    # Sort games by date in descending order
+    sorted_games = sorted(games, key=lambda game: game["date"], reverse=True)
+    
+    # Get 'teamA' of the most recent game
+    most_recent_team_b = sorted_games[0]["teamB"]
+    most_recent_date = sorted_games[0]["date"].strftime('%Y-%m-%d')
+    most_recent_colour_b = sorted_games[0]["colourTeamB"]
+    
+    # Create an array containing 'teamA' field from the most recent game.
+    team_b_list = [most_recent_team_b]
+    return jsonify({"teamB": team_b_list, "date": most_recent_date, "colourB": most_recent_colour_b})
+
 @games_bp.route('/games/swap_player', methods=['PUT'])
 #@jwt_required()
 def swap_player():
