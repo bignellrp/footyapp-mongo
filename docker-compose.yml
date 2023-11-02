@@ -5,10 +5,9 @@ services:
     image: ghcr.io/bignellrp/footyapp-api:${BRANCH}
     container_name: footyapp-api-${BRANCH}
     networks:
-      br0:
-        ipv4_address: ${API_IPV4_ADDRESS}
+      - br1
     ports:
-      - "80:80"
+      - "2${PORT}:80"
     restart: always
     env_file:
       - /mnt/docker/footyapp-api-${BRANCH}/.env
@@ -21,10 +20,9 @@ services:
     image: mongo:latest
     container_name: footyapp-db-${BRANCH}
     networks:
-      br0:
-        ipv4_address: ${DB_IPV4_ADDRESS}
+      - br1
     ports:
-      - "27017:27017"
+      - "27${PORT}:27017"
     restart: always
     env_file:
       - /mnt/docker/footyapp-api-${BRANCH}/.env
@@ -35,6 +33,6 @@ services:
       - TZ=Europe/London
 
 networks:
-  br0:
+  br1:
     external: true
-    name: br0
+    name: br1
