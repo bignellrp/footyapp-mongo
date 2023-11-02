@@ -247,20 +247,23 @@ def swap_player():
             # Replace current_player with new_player in teamA
             if current_player in teamA:
                 teamA = [new_player if player == current_player else player for player in teamA]
+                # Update the total for Team A
+                games_collection.update_one(
+                    {"date": most_recent_game["date"]},
+                    {"$inc": {"totalTeamA": new_player_total_diff - current_player_total_diff}}
+                )
             # Replace current_player with new_player in teamB
             if current_player in teamB:
                 teamB = [new_player if player == current_player else player for player in teamB]
-            
+                # Update the total for Team B
+                games_collection.update_one(
+                    {"date": most_recent_game["date"]},
+                    {"$inc": {"totalTeamB": new_player_total_diff - current_player_total_diff}}
+                )
             # Update the game with the modified teams
             games_collection.update_one(
                 {"date": most_recent_game["date"]},
                 {"$set": {"teamA": teamA, "teamB": teamB}}
-            )
-            
-            # Update game totalTeamA and totalTeamB
-            games_collection.update_one(
-                {"date": most_recent_game["date"]},
-                {"$inc": {"totalTeamA": new_player_total_diff - current_player_total_diff}}
             )
             
             return jsonify({"message": "Player swapped and totals updated successfully"})
