@@ -38,6 +38,29 @@ def get_players():
                     ]
     return jsonify(player_list)
 
+@players_bp.route('/players/reset_stats', methods=['POST'])
+def reset_player_stats():
+    update_result = players_collection.update_many(
+        {},
+        {
+            "$set": {
+                "wins": 0,
+                "draws": 0,
+                "losses": 0,
+                "score": 0,
+                "played": 0,
+                "percent": 0,
+                "winpercent": 0,
+                "goals": 0
+            }
+        }
+    )
+    
+    return jsonify({
+        "message": "Player stats have been reset",
+        "modified_count": update_result.modified_count
+    })
+
 @players_bp.route('/players/player_names', methods=['GET'])
 #@jwt_required()
 def get_player_names():
